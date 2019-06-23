@@ -1,0 +1,50 @@
+---
+modules:
+  cloud:
+    token: c6cc031873b391b19af12283:b19242d203e92d85cda374bfc5fabd4ee3f85ceb9d2d5f377ee3b27cdc74ea134caf120f
+    timeout: 30s  # BlazeMeter API client timeout
+    browser-open: none  # auto-open browser on test start/end/both/none
+    check-interval: 5s  # interval which Taurus uses to query test status from BlazeMeter
+    request-logging-limit: 10240 # use this to dump more of request/response data into logs, for debugging
+    account: 313167
+    workspace: 308005
+    project: Pytest-template
+    test: Github-Api
+    report-name: Pytest-template   # name of report
+
+reporting:
+  - module: final-stats
+    summary: true
+    percentiles: true
+    failed-labels: false
+    test-duration: true
+  - module: passfail
+    run-at: cloud
+    criteria:
+      - avg-rt>800ms for 10s, stop as failed
+  - module: passfail
+    run-at: local
+    criteria:
+      - avg-rt>1000ms for 10s, stop as failed
+  - module: junit-xml
+    filename: reports/taurus.xml
+    data-source: pass-fail
+
+settings:
+  artifacts-dir: logs/%Y-%m-%d_%H-%M-%S.%f
+
+execution:
+  - executor: pytest
+    runner: pytest
+    concurrency:
+      local: 1
+      cloud: 2
+    iterations: 1
+    ramp-up: 10s
+    hold-for: 20s
+    scenario: pytest-run
+
+scenarios:
+  pytest-run:
+    additional-args: -m loadtest
+    script: tests

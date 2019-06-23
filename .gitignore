@@ -1,0 +1,18 @@
+# bzt
+jmeter.log
+
+# Logs
+logs
+
+# MacOS Files
+.DS_Store
+
+# Python Cache Files
+/pytest_cache
+__pycache__
+
+# Report Files
+reports
+
+# Visual Studio Code
+.vscode

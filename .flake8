@@ -1,0 +1,3 @@
+[flake8]
+exclude = .venv/*,taurus-venv/*,logs/*
+max-line-length = 145
